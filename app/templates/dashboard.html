@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Status Server</h1>
+<div class="card-container">
+    {% for key, value in system_info.items() %}
+    <div class="card">
+        <h3>{{ key }}</h3>
+        <p>{{ value }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

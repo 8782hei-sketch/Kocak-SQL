@@ -11,6 +11,7 @@ Kocak-SQL hadir dengan bahasa kueri (*query language*) yang disederhanakan, memu
    - Antarmuka *dark mode* kekinian dengan *glassmorphism* dan animasi halus.
    - Console eksekusi khusus dengan bahasa perintah bahasa Indonesia (*Kocak-SQL DSL*).
    - Penampil tabel secara instan.
+3. **REST API Endpoint**: Mengizinkan aplikasi eksternal untuk terhubung, mengambil, dan mengubah data dengan mudah.
 
 ## Bahasa Perintah Kocak-SQL
 
@@ -106,6 +107,34 @@ tambah_data: users [nama='Zaki', umur=28]
 simpan_transaksi
 ```
 
+## API Integrasi (Client-Server)
+
+Kocak-SQL juga dapat berperan sebagai Database Server. Anda bisa menyambungkan aplikasi lain (Python, Node.js, PHP, JS, dll.) untuk mengirim dan memanggil data melalui REST API yang telah disediakan.
+
+**Endpoint:** `POST /api/query`
+**Header:** `Content-Type: application/json`
+**Body (JSON):**
+```json
+{
+  "query": "lihat_data: users"
+}
+```
+**Contoh Balasan (JSON):**
+```json
+{
+  "status": "success",
+  "message": "Berhasil mengambil data",
+  "data": [
+    {
+      "id": 1,
+      "nama": "Budi",
+      "umur": 20
+    }
+  ]
+}
+```
+Untuk mencoba simulasi koneksi API ini, Anda dapat menjalankan script simulasi client yang telah disediakan yaitu **`contoh_client.py`**.
+
 ## Arsitektur (Modular Monolith)
 
 Aplikasi ini menggunakan struktur Modular Monolith:
@@ -117,6 +146,7 @@ Kocak-SQL/
 │   ├── __init__.py          # Flask App Factory
 │   ├── database.py          # Koneksi ke SQLite
 │   ├── modules/
+│   │   ├── api.py           # REST API Endpoint
 │   │   ├── db_manager.py    # Pengelola database & parser sintaks Kocak-SQL
 │   │   └── server_status.py # Logika monitoring server
 │   ├── static/
@@ -127,6 +157,7 @@ Kocak-SQL/
 │       └── db_view.html     
 │
 ├── run.py                   # Entry point aplikasi
+├── contoh_client.py         # Script contoh aplikasi yang terkoneksi ke DB
 └── Readme.md                # Dokumentasi aplikasi
 ```
 
@@ -135,10 +166,11 @@ Kocak-SQL/
 1. Pastikan Python sudah terinstall di sistem Anda.
 2. Install library yang dibutuhkan:
    ```bash
-   pip install Flask psutil
+   pip install Flask psutil requests
    ```
-3. Jalankan aplikasi:
+3. Jalankan aplikasi Server Kocak-SQL:
    ```bash
    python run.py
    ```
 4. Buka browser dan akses alamat: `http://127.0.0.1:5000`
+5. (Opsional) Buka terminal baru dan jalankan `python contoh_client.py` untuk menguji integrasi API.

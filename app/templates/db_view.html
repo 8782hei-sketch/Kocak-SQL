@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Pengelola Database</h1>
+
+<div class="db-container">
+    <div class="table-list">
+        <h3>Tabel Tersedia</h3>
+        <ul>
+            {% for table in tables %}
+            <li><a href="{{ url_for('db_manager.view_table', table_name=table['name']) }}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 5px;">
+                    <line x1="8" y1="6" x2="21" y2="6"></line>
+                    <line x1="8" y1="12" x2="21" y2="12"></line>
+                    <line x1="8" y1="18" x2="21" y2="18"></line>
+                    <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                    <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                    <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                {{ table['name'] }}
+            </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="table-viewer">
+        <h3>Console Query Kocak-SQL</h3>
+        <form action="{{ url_for('db_manager.execute_query') }}" method="POST">
+            <div class="query-box">
+                <textarea name="query" placeholder="Ketik perintah (contoh: buat_tabel: users [id, nama, umur])" rows="4">{{ query if query else '' }}</textarea>
+            </div>
+            <button type="submit">Jalankan Perintah</button>
+        </form>
+        
+        {% if message %}
+        <div class="message {{ 'error' if 'Error' in message else 'success' }}">{{ message }}</div>
+        {% endif %}
+        
+        {% if query_result %}
+        <div style="margin-top: 30px;">
+            <h3>Hasil Eksekusi</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for col in query_result.columns %}
+                            <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in query_result.rows %}
+                        <tr>
+                            {% for col in query_result.columns %}
+                            <td>{{ row[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if current_table %}
+        <div style="margin-top: 30px;">
+            <div class="table-viewer-header">
+                <h3 style="margin: 0;">Melihat Tabel: {{ current_table }}</h3>
+            </div>
+            {% if rows %}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for col in columns %}
+                            <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in rows %}
+                        <tr>
+                            {% for col in columns %}
+                            <td>{{ row[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p style="color: var(--text-secondary); margin-top: 20px;">Tabel ini belum memiliki data.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
