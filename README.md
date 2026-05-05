@@ -1,176 +1,114 @@
-# Kocak-SQL
+<div align="center">
+  <img src="https://img.icons8.com/color/96/000000/database.png" alt="Kocak-SQL Logo">
+  <h1>Kocak-SQL</h1>
+  <p><b>Sistem Manajemen Database Modern Berbasis DSL dengan Arsitektur Client-Server</b></p>
 
-Kocak-SQL adalah sebuah aplikasi pengelola database sederhana berbasis Python dengan antarmuka WebUI yang premium dan mudah digunakan. Aplikasi ini dibangun dengan arsitektur **Modular Monolith** menggunakan Flask, yang memisahkan fitur-fitur menjadi modul yang terorganisir.
+  [![Python](https://img.shields.io/badge/Python-3.x-blue.svg?style=flat-square&logo=python)](https://www.python.org/)
+  [![Flask](https://img.shields.io/badge/Framework-Flask-black.svg?style=flat-square&logo=flask)](https://flask.palletsprojects.com/)
+  [![SQLite](https://img.shields.io/badge/Database-SQLite-003B57.svg?style=flat-square&logo=sqlite)](https://www.sqlite.org/)
+  [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)]()
+</div>
 
-Kocak-SQL hadir dengan bahasa kueri (*query language*) yang disederhanakan, memungkinkan pengguna untuk mengelola database tanpa perlu mengetik SQL panjang.
+---
 
-## Fitur Utama
+## 📖 Pengantar
 
-1. **Dashboard Server Status**: Memantau status server secara real-time termasuk penggunaan CPU, RAM, dan informasi sistem operasi.
-2. **Database Manager Premium**: 
-   - Antarmuka *dark mode* kekinian dengan *glassmorphism* dan animasi halus.
-   - Console eksekusi khusus dengan bahasa perintah bahasa Indonesia (*Kocak-SQL DSL*).
-   - Penampil tabel secara instan.
-3. **REST API Endpoint**: Mengizinkan aplikasi eksternal untuk terhubung, mengambil, dan mengubah data dengan mudah.
+**Kocak-SQL** adalah aplikasi pengelola database (*Database Management System / DBMS*) ringan yang dirancang untuk mempermudah manajemen data. Dibangun dengan **Python, Flask, dan SQLite**, aplikasi ini menawarkan antarmuka WebUI bernuansa premium (*glassmorphism dark-mode*) serta fitur unggulan berupa bahasa kueri (*Domain-Specific Language*) tersendiri yang sangat mudah dipahami.
 
-## Bahasa Perintah Kocak-SQL
+Selain antarmuka web, Kocak-SQL juga mengimplementasikan arsitektur **Client-Server** yang memungkinkan aplikasi eksternal (via REST API) untuk terhubung dan mengelola data secara dinamis.
 
-Kocak-SQL menerjemahkan perintah sederhana bahasa Indonesia menjadi perintah SQL murni secara otomatis. Jika perintah tidak dikenali, ia akan secara otomatis mencoba menjalankan perintah tersebut sebagai kueri SQL biasa (fallback).
-*Tip: Anda juga dapat mengetikkan beberapa perintah sekaligus dipisahkan dengan Enter (baris baru)!*
+---
 
-Berikut daftar perintah yang disederhanakan:
+## 🌟 Fitur Unggulan
 
-### 1. Membuat Tabel
-Perintah sederhana untuk membuat tabel beserta kolomnya. Jika ada kolom bernama `id`, ia otomatis akan menjadi `INTEGER PRIMARY KEY AUTOINCREMENT`. Jika ada nama seperti `umur`, `stok`, `qty`, `harga`, akan diset `INTEGER`, selebihnya `TEXT`.
+- **🚀 Dashboard Real-time:** Memonitor kesehatan server (CPU & RAM) secara instan.
+- **💎 Premium WebUI:** Antarmuka modern dengan *glassmorphism*, tipografi *Inter/Outfit*, dan animasi yang memanjakan mata.
+- **🗣️ Kocak-SQL DSL:** Menulis *query* SQL kompleks dengan bahasa Indonesia sederhana tanpa perlu pusing memikirkan sintaks SQL asli.
+- **🔄 Batch & TCL Support:** Eksekusi puluhan baris kueri sekaligus secara aman dengan dukungan Manajemen Transaksi.
+- **🔌 REST API Endpoint:** Hubungkan bahasa pemrograman apapun dengan database ini melalui protokol HTTP JSON.
 
-**Sintaks:** `buat_tabel: <nama_tabel> [<kolom1>, <kolom2>, ...]`
-**Contoh:** 
-```text
-buat_tabel: users [id, nama, umur]
-```
-*(Menjadi: CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, nama TEXT, umur INTEGER);)*
+---
 
-### 2. Menambahkan Data
-Memasukkan baris baru ke dalam tabel yang dipilih. Gunakan tanda kutip `''` untuk data teks.
+## 🛠️ Arsitektur Sistem
 
-**Sintaks:** `tambah_data: <nama_tabel> [<kolom1>=<nilai1>, <kolom2>=<nilai2>]`
-**Contoh:** 
-```text
-tambah_data: users [nama='Budi Raharjo', umur=25]
-```
-
-### 3. Mengubah Data
-Memperbarui data yang ada berdasarkan kondisi yang diberikan di dalam kurung siku pertama `[]`.
-
-**Sintaks:** `ubah_data: <nama_tabel> [<kondisi_kolom>=<nilai>] [<kolom_diubah>=<nilai_baru>]`
-**Contoh:** 
-```text
-ubah_data: users [id=1] [nama='Andi Perkasa', umur=26]
-```
-
-### 4. Menghapus Data
-Menghapus baris dari tabel berdasarkan suatu kondisi tertentu.
-
-**Sintaks:** `hapus_data: <nama_tabel> [<kondisi>]`
-**Contoh:** 
-```text
-hapus_data: users [id=1]
-```
-
-### 5. Melihat Data
-Ini adalah cara pintas untuk perintah `SELECT * FROM ...`.
-
-**Sintaks:** `lihat_data: <nama_tabel>`
-**Contoh:** 
-```text
-lihat_data: users
-```
-
-### 6. Menghapus Tabel
-Menghapus (Drop) sebuah tabel beserta semua isinya secara permanen.
-
-**Sintaks:** `hapus_tabel: <nama_tabel>`
-**Contoh:** 
-```text
-hapus_tabel: users
-```
-
-### 7. DCL (Data Control Language) - Simulasi Manajemen Akses
-Karena SQLite tidak memiliki sistem kontrol pengguna mandiri (`GRANT`/`REVOKE`), Kocak-SQL menyimulasikan DCL dengan memanipulasi tabel bawaan `users`.
-
-**Memberi Akses (Role)**
-**Sintaks:** `beri_akses: <username> [<role_baru>]`
-**Contoh:** 
-```text
-beri_akses: admin [administrator_utama]
-```
-
-**Mencabut Akses (Kembali ke pengguna biasa)**
-**Sintaks:** `cabut_akses: <username>`
-**Contoh:** 
-```text
-cabut_akses: admin
-```
-
-### 8. TCL (Transaction Control Language)
-Digunakan untuk mengeksekusi sekumpulan perintah secara aman (terutama jika Anda mengeksekusi beberapa baris perintah sekaligus di Console).
-
-- **Memulai Transaksi:** `mulai_transaksi` (Membuka sesi transaksi sementara)
-- **Menyimpan Transaksi:** `simpan_transaksi` (Menyimpan seluruh perubahan secara permanen)
-- **Membatalkan Transaksi:** `batal_transaksi` (Membatalkan semua perintah sejak `mulai_transaksi`)
-
-**Contoh Penggunaan Batch dengan TCL:**
-```text
-mulai_transaksi
-tambah_data: users [nama='Ahmad', umur=24]
-tambah_data: users [nama='Zaki', umur=28]
-simpan_transaksi
-```
-
-## API Integrasi (Client-Server)
-
-Kocak-SQL juga dapat berperan sebagai Database Server. Anda bisa menyambungkan aplikasi lain (Python, Node.js, PHP, JS, dll.) untuk mengirim dan memanggil data melalui REST API yang telah disediakan.
-
-**Endpoint:** `POST /api/query`
-**Header:** `Content-Type: application/json`
-**Body (JSON):**
-```json
-{
-  "query": "lihat_data: users"
-}
-```
-**Contoh Balasan (JSON):**
-```json
-{
-  "status": "success",
-  "message": "Berhasil mengambil data",
-  "data": [
-    {
-      "id": 1,
-      "nama": "Budi",
-      "umur": 20
-    }
-  ]
-}
-```
-Untuk mencoba simulasi koneksi API ini, Anda dapat menjalankan script simulasi client yang telah disediakan yaitu **`contoh_client.py`**.
-
-## Arsitektur (Modular Monolith)
-
-Aplikasi ini menggunakan struktur Modular Monolith:
+Kocak-SQL dibangun menggunakan pola **Modular Monolith**.
 
 ```text
 Kocak-SQL/
-│
 ├── app/
-│   ├── __init__.py          # Flask App Factory
-│   ├── database.py          # Koneksi ke SQLite
+│   ├── __init__.py          # Flask App Factory & Blueprint registration
+│   ├── database.py          # Inisialisasi SQLite & Connection Pooling
 │   ├── modules/
-│   │   ├── api.py           # REST API Endpoint
-│   │   ├── db_manager.py    # Pengelola database & parser sintaks Kocak-SQL
-│   │   └── server_status.py # Logika monitoring server
+│   │   ├── api.py           # Endpoint REST API (/api/query)
+│   │   ├── db_manager.py    # Interpreter DSL & Pengelola Tabel
+│   │   └── server_status.py # Integrasi psutil untuk Server Monitoring
 │   ├── static/
-│   │   └── style.css        # Desain antarmuka (Dark mode premium CSS)
-│   └── templates/
-│       ├── base.html        
-│       ├── dashboard.html   
-│       └── db_view.html     
-│
-├── run.py                   # Entry point aplikasi
-├── contoh_client.py         # Script contoh aplikasi yang terkoneksi ke DB
-└── Readme.md                # Dokumentasi aplikasi
+│   │   └── style.css        # Desain visual premium (UI/UX)
+│   └── templates/           # View layer (HTML Jinja2)
+├── run.py                   # Server Entry Point
+└── contoh_client.py         # Contoh penerapan integrasi API
 ```
 
-## Cara Menjalankan
+---
 
-1. Pastikan Python sudah terinstall di sistem Anda.
-2. Install library yang dibutuhkan:
+## 💻 Panduan Penggunaan Sintaks (Kocak-SQL DSL)
+
+Interpreter Kocak-SQL akan menerjemahkan perintah Anda secara otomatis ke SQLite. Jika perintah tidak valid di DSL, sistem akan mencoba menjalankannya sebagai SQL asli.
+
+### 1. Data Definition & Manipulation
+| Operasi | Sintaks Kocak-SQL | Contoh Eksekusi |
+| :--- | :--- | :--- |
+| **Buat Tabel** | `buat_tabel: <nama> [<kolom>]` | `buat_tabel: users [id, nama, umur]` |
+| **Hapus Tabel** | `hapus_tabel: <nama>` | `hapus_tabel: users` |
+| **Lihat Data** | `lihat_data: <nama>` | `lihat_data: users` |
+| **Tambah Data** | `tambah_data: <nama> [<k>=<v>]` | `tambah_data: users [nama='Budi', umur=20]` |
+| **Ubah Data** | `ubah_data: <nama> [<kondisi>] [<k>=<v>]` | `ubah_data: users [id=1] [umur=21]` |
+| **Hapus Data** | `hapus_data: <nama> [<kondisi>]` | `hapus_data: users [id=1]` |
+
+### 2. Transaction Control Language (TCL) & DCL
+- **Mulai Transaksi:** `mulai_transaksi` (BEGIN)
+- **Simpan Transaksi:** `simpan_transaksi` (COMMIT)
+- **Batalkan Transaksi:** `batal_transaksi` (ROLLBACK)
+- **Beri Akses (Simulasi):** `beri_akses: <user> [<role>]`
+- **Cabut Akses (Simulasi):** `cabut_akses: <user>`
+
+---
+
+## 🔗 Integrasi API (Client-Server)
+
+Kocak-SQL menyediakan endpoint REST API profesional:
+
+- **URL:** `POST /api/query`
+- **Headers:** `Content-Type: application/json`
+- **Payload:**
+  ```json
+  {
+    "query": "lihat_data: users"
+  }
+  ```
+- **Response:** Terstruktur rapi dengan kode status HTTP yang sesuai (Bisa dilihat detailnya dengan menjalankan file uji coba `contoh_client.py`).
+
+---
+
+## ⚙️ Cara Instalasi & Menjalankan
+
+**Prasyarat:** Python 3.8+
+
+1. **Install Dependencies:**
    ```bash
    pip install Flask psutil requests
    ```
-3. Jalankan aplikasi Server Kocak-SQL:
+2. **Jalankan Server Database:**
    ```bash
    python run.py
    ```
-4. Buka browser dan akses alamat: `http://127.0.0.1:5000`
-5. (Opsional) Buka terminal baru dan jalankan `python contoh_client.py` untuk menguji integrasi API.
+3. Buka Dashboard melalui Browser di: `http://127.0.0.1:5000`
+4. *(Opsional)* Uji koneksi API dengan membuka terminal baru dan jalankan:
+   ```bash
+   python contoh_client.py
+   ```
+
+---
+<div align="center">
+  <i>Dibuat dengan ❤️ untuk kemudahan pengelolaan database.</i>
+</div>
