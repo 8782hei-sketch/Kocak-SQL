@@ -96,7 +96,7 @@ Kocak-SQL menyediakan endpoint REST API profesional:
 
 1. **Install Dependencies:**
    ```bash
-   pip install Flask psutil requests
+   pip install -r requirements.txt
    ```
 2. **Jalankan Server Database:**
    ```bash
