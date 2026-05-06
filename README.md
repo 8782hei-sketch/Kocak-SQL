@@ -59,8 +59,13 @@ Interpreter Kocak-SQL akan menerjemahkan perintah Anda secara otomatis ke SQLite
 | Operasi | Sintaks Kocak-SQL | Contoh Eksekusi |
 | :--- | :--- | :--- |
 | **Buat Tabel** | `buat_tabel: <nama> [<kolom>]` | `buat_tabel: users [id, nama, umur]` |
+| **Ubah Nama Tabel** | `ubah_nama_tabel: <lama> [<baru>]`| `ubah_nama_tabel: users [pelanggan]` |
+| **Tambah Kolom** | `tambah_kolom: <nama> [<kolom>]` | `tambah_kolom: users [alamat TEXT]` |
+| **Hapus Kolom** | `hapus_kolom: <nama> [<kolom>]` | `hapus_kolom: users [alamat]` |
+| **Kosongkan Tabel** | `kosongkan_tabel: <nama>` | `kosongkan_tabel: users` |
 | **Hapus Tabel** | `hapus_tabel: <nama>` | `hapus_tabel: users` |
 | **Lihat Data** | `lihat_data: <nama>` | `lihat_data: users` |
+| **Cari Data** | `cari_data: <nama> [<kondisi>]` | `cari_data: users [umur > 20]` |
 | **Tambah Data** | `tambah_data: <nama> [<k>=<v>]` | `tambah_data: users [nama='Budi', umur=20]` |
 | **Ubah Data** | `ubah_data: <nama> [<kondisi>] [<k>=<v>]` | `ubah_data: users [id=1] [umur=21]` |
 | **Hapus Data** | `hapus_data: <nama> [<kondisi>]` | `hapus_data: users [id=1]` |
@@ -96,7 +101,7 @@ Kocak-SQL menyediakan endpoint REST API profesional:
 
 1. **Install Dependencies:**
    ```bash
-   pip install -r requirements.txt
+   pip install Flask psutil requests
    ```
 2. **Jalankan Server Database:**
    ```bash
